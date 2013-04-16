@@ -1,0 +1,15 @@
+{
+ "friendlyVersion": "0.1",
+ "versionDefName": "APP_RESOURCES",
+
+ "media": [
+     {"type":"font",
+      "defName":"FONT_SANSATION_LIGHT_34",
+      "file":"fonts/sansation/Sansation_Light_34.ttf"
+     },
+     {"type":"font",
+      "defName":"FONT_SANSATION_BOLD_34",
+      "file":"fonts/sansation/Sansation_Bold_34.ttf"
+     }
+]
+}
