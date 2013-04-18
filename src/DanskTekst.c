@@ -8,6 +8,8 @@
 #define DEBUG 0
 #define BUFFER_SIZE 44
 
+#define MAX(a,b) (a > b ? a : b)
+
 #define MY_UUID { 0xE3, 0x8D, 0xFC, 0x3E, 0x1F, 0x96, 0x4C, 0x0F, 0xAF, 0x6F, 0x78, 0x60, 0xA5, 0x67, 0xEB, 0x27 }
 PBL_APP_INFO(MY_UUID,
              "Dansk Tekst", 
@@ -66,8 +68,12 @@ void get_hour_string(int hour, int minute, char *hourBuffer, size_t length)
     strcat(hourBuffer, NUMBERS[hour % 12]);
 }
 
-int get_minute_string(int minute, char *line1, char *line2, char *line3)
+int get_minute_string(int minute, char *line1, char *line2, char *line3, size_t length)
 {
+    memset(line1, 0, length);
+    memset(line2, 0, length);
+    memset(line3, 0, length);
+
 	int lines = 0;
     int m1 = minute % 15;
     int m2 = minute / 15;
@@ -201,7 +207,7 @@ int time_to_4words(int hours, int minutes, char *line1, char *line2, char *line3
 	}
 	else
 	{
-		int lineCount = get_minute_string(minutes, line1, line2, line3);
+		int lineCount = get_minute_string(minutes, line1, line2, line3, length);
 		char *line = lineCount == 2 ? line3 : line4;
 		strcpy(line, hourText);
 		return lineCount;
@@ -273,7 +279,7 @@ bool needToUpdateLine(Line *line, char lineStr[2][BUFFER_SIZE], char *nextValue)
 	GRect rect = layer_get_frame(&line->currentLayer.layer);
 	currentStr = (rect.origin.x == 0) ? lineStr[0] : lineStr[1];
 
-	if (memcmp(currentStr, nextValue, strlen(nextValue)) != 0 || (strlen(nextValue) == 0 && strlen(currentStr) != 0)) 
+	if (memcmp(currentStr, nextValue, MAX(strlen(currentStr),strlen(nextValue))) != 0 || (strlen(nextValue) == 0 && strlen(currentStr) != 0)) 
 		return true;
 	return false;
 }
