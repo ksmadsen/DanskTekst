@@ -13,4 +13,10 @@ Screenshot
 
 Binary
 ======
-The binary can be downloaded here: http://www.tanis.dk/pebble/DanskTekst.pbw
+The binary can be downloaded here:
+
+Precise version:
+http://www.tanis.dk/pebble/DanskTekst.pbw
+
+Fuzzy version:
+http://www.tanis.dk/pebble/DanskFuzzy.pbw
