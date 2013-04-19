@@ -11,7 +11,7 @@
 PBL_APP_INFO(MY_UUID,
              MY_TITLE, 
              "Tanis",
-             1, 1,
+             1, 2,
              DEFAULT_MENU_ICON,
 #ifdef DEBUG
              APP_INFO_STANDARD_APP

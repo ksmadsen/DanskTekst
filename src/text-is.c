@@ -22,7 +22,7 @@ void get_hour_string_is(int hour, int minute, char *hourBuffer, size_t length)
 {
     memset(hourBuffer, 0, length);
     
-    if (minute > 15)
+    if (minute >= 25)
         hour++;
         
     strcat(hourBuffer, NUMBERS[hour % 12]);
