@@ -4,21 +4,21 @@
 
 static const char * const NUMBERS[] = 
 {
-    "tolv",
-    "et",
-    "to",
-    "tre",
-    "fire",
-    "fem",
-    "seks",
-    "syv",
-    "otte",
-    "ni",
-    "ti",
-    "elleve"
+    "tólf",
+    "eitt",
+    "tvö",
+    "þrjú",
+    "fjögur",
+    "fimm",
+    "sex",
+    "sjö",
+    "átta",
+    "níu",
+    "tíu",
+    "ellefu"
 };
 
-void get_hour_string_da(int hour, int minute, char *hourBuffer, size_t length)
+void get_hour_string_is(int hour, int minute, char *hourBuffer, size_t length)
 {
     memset(hourBuffer, 0, length);
     
@@ -28,7 +28,7 @@ void get_hour_string_da(int hour, int minute, char *hourBuffer, size_t length)
     strcat(hourBuffer, NUMBERS[hour % 12]);
 }
 
-int get_minute_string_da(int minute, char *line1, char *line2, char *line3, size_t length)
+int get_minute_string_is(int minute, char *line1, char *line2, char *line3, size_t length)
 {
 #ifdef FUZZY
 	minute = (((minute + 2) / 5) * 5) % 60;
@@ -66,127 +66,127 @@ int get_minute_string_da(int minute, char *line1, char *line2, char *line3, size
     switch(m1)
     {
     	case 1:
-	    	strcat(line1, "et");
-	    	strcat(line2, "minut");
+	    	strcat(line1, "ein");
+	    	strcat(line2, "mínúta");
 	    	lines++;
 	    	break;
 	    case 2:
-	    	strcat(line1, "to");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tvær");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 3:
-	    	strcat(line1, "tre");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "þrjár");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 4:
-	    	strcat(line1, "fire");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "fjórar");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 5:
-	    	strcat(line1, "fem");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "fimm");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 6:
-	    	strcat(line1, "seks");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "sex");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 7:
-	    	strcat(line1, "syv");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "sjö");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 8:
-	    	strcat(line1, "otte");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "átta");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 9:
-	    	strcat(line1, "ni");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "níu");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 10:
-	    	strcat(line1, "ti");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tíu");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 11:
-	    	strcat(line1, "elleve");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "ellefu");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 12:
-	    	strcat(line1, "tolv");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tólf");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 13:
-	    	strcat(line1, "tretten");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "þrettán");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 14:
-	    	strcat(line1, "fjorten");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "fjórtán");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 0:
 	    case 15:
-	    	strcat(line1, "kvart");
+	    	strcat(line1, "korter");
 	    	break;
 	    case 16:
-	    	strcat(line1, "seksten");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "sextán");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 17:
-	    	strcat(line1, "sytten");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "sautján");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 18:
-	    	strcat(line1, "atten");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "átján");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 19:
-	    	strcat(line1, "nitten");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "nítján");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 20:
-	    	strcat(line1, "tyve");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 21:
-	    	strcat(line1, "enogtyve");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tuttugu og ein");
+	    	strcat(line2, "mínóta");
 	    	lines++;
 	    	break;
 	    case 22:
-	    	strcat(line1, "toogtyve");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tuttugu og tvær");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 23:
-	    	strcat(line1, "treogtyve");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tuttugu og þrjár");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 24:
-	    	strcat(line1, "fireogtyve");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tuttugu og fjórar");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	    case 25:
-	    	strcat(line1, "femogtyve");
-	    	strcat(line2, "minutter");
+	    	strcat(line1, "tuttugu og fimm");
+	    	strcat(line2, "mínútur");
 	    	lines++;
 	    	break;
 	}	    
@@ -198,23 +198,23 @@ int get_minute_string_da(int minute, char *line1, char *line2, char *line3, size
     switch(m2)
     {
     	case 0:
-    		strcat(line, "over");
+    		strcat(line, "yfir");
     		break;
     	case 1:
-    		strcat(line, "i halv");
+    		strcat(line, "í hálf");
     		break;
     	case 2:
-    		strcat(line, "over halv");
+    		strcat(line, "yfir hálf");
     		break;
     	case 3:
-    		strcat(line, "i");
+    		strcat(line, "í");
     		break;
     }
     
     return lines;
 }
 
-int time_to_4words_da(int hours, int minutes, char *line1, char *line2, char *line3, char *line4, size_t length)
+int time_to_4words_is(int hours, int minutes, char *line1, char *line2, char *line3, char *line4, size_t length)
 {
 	memset(line1, 0, length);
 	memset(line2, 0, length);
@@ -222,7 +222,7 @@ int time_to_4words_da(int hours, int minutes, char *line1, char *line2, char *li
 	memset(line4, 0, length);
 
 	char hourText[length];
-	get_hour_string_da(hours, minutes, hourText, length);
+	get_hour_string_is(hours, minutes, hourText, length);
 	
 	if(minutes == 0)
 	{
@@ -231,13 +231,13 @@ int time_to_4words_da(int hours, int minutes, char *line1, char *line2, char *li
 	}
 	else if(minutes == 30)
 	{
-		strcpy(line1, "halv");
+		strcpy(line1, "hálf");
 		strcpy(line2, hourText);
 		return 1;
 	}
 	else
 	{
-		int lineCount = get_minute_string_da(minutes, line1, line2, line3, length);
+		int lineCount = get_minute_string_is(minutes, line1, line2, line3, length);
 		char *line = lineCount == 2 ? line3 : line4;
 		strcpy(line, hourText);
 		return lineCount;

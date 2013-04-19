@@ -5,27 +5,15 @@
 #include "pebble_app.h"
 #include "pebble_fonts.h"
 
-#include "text-da.h"
+#include "DanskTekst.h"
+#include "text.h"
 
-#define DEBUG 0
-#define FUZZY 0
-#define BUFFER_SIZE 44
-
-#define MAX(a,b) (a > b ? a : b)
-
-#if FUZZY
-#define MY_UUID { 0x7B, 0xDE, 0xD2, 0x8E, 0xF2, 0x02, 0x43, 0x6F, 0xAF, 0x71, 0x06, 0x60, 0x57, 0xA0, 0x64, 0x3F }
-#define MY_TITLE "Dansk Fuzzy"
-#else
-#define MY_UUID { 0xE3, 0x8D, 0xFC, 0x3E, 0x1F, 0x96, 0x4C, 0x0F, 0xAF, 0x6F, 0x78, 0x60, 0xA5, 0x67, 0xEB, 0x27 }
-#define MY_TITLE "Dansk Tekst"
-#endif
 PBL_APP_INFO(MY_UUID,
              MY_TITLE, 
              "Tanis",
              1, 1,
              DEFAULT_MENU_ICON,
-#if DEBUG
+#ifdef DEBUG
              APP_INFO_STANDARD_APP
 #else
 			 APP_INFO_WATCH_FACE
@@ -175,7 +163,7 @@ void display_initial_time(PblTm *t)
  * Debug methods. For quickly debugging enable debug macro on top to transform the watchface into
  * a standard app and you will be able to change the time with the up and down buttons
  */ 
-#if DEBUG
+#ifdef DEBUG
 
 void up_single_click_handler(ClickRecognizerRef recognizer, Window *window) 
 {
@@ -228,7 +216,7 @@ void handle_init(AppContextRef ctx)
 {
   	(void)ctx;
 
-	window_init(&window, "Dansk Tekst");
+	window_init(&window, MY_TITLE);
 	window_stack_push(&window, true);
 	window_set_background_color(&window, GColorBlack);
 
@@ -258,7 +246,7 @@ void handle_init(AppContextRef ctx)
 	layer_add_child(&window.layer, &line[3].currentLayer.layer);
 	layer_add_child(&window.layer, &line[3].nextLayer.layer);
 	
-#if DEBUG
+#ifdef DEBUG
 	// Button functionality
 	window_set_click_config_provider(&window, (ClickConfigProvider) click_config_provider);
 #endif
