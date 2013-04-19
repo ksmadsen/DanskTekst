@@ -20,3 +20,6 @@ http://www.tanis.dk/pebble/DanskTekst.pbw
 
 Fuzzy version:
 http://www.tanis.dk/pebble/DanskFuzzy.pbw
+
+Also downloadable on:
+http://www.mypebblefaces.com
