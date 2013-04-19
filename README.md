@@ -9,7 +9,7 @@ Parts of the font code inspired by http://forums.getpebble.com/discussion/4265/s
 
 Screenshot
 ==========
-![DanskTekst screenshot](http://www.tanis.dk/pebble/DanskTekst.png?r=1)
+![DanskTekst screenshot](http://www.tanis.dk/pebble/screenshots/DanskTekst.png)
 
 Binary
 ======
