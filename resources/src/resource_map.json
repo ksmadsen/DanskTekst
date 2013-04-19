@@ -5,11 +5,11 @@
  "media": [
      {"type":"font",
       "defName":"FONT_SANSATION_LIGHT_32",
-      "file":"fonts/sansation/Sansation_Light_34.ttf"
+      "file":"fonts/sansation/Sansation_Light.ttf"
      },
      {"type":"font",
       "defName":"FONT_SANSATION_BOLD_32",
-      "file":"fonts/sansation/Sansation_Bold_34.ttf"
+      "file":"fonts/sansation/Sansation_Bold.ttf"
      }
 ]
 }
