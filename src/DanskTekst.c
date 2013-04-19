@@ -6,15 +6,22 @@
 #include "pebble_fonts.h"
 
 #define DEBUG 0
+#define FUZZY 1
 #define BUFFER_SIZE 44
 
 #define MAX(a,b) (a > b ? a : b)
 
+#if FUZZY
+#define MY_UUID { 0x7B, 0xDE, 0xD2, 0x8E, 0xF2, 0x02, 0x43, 0x6F, 0xAF, 0x71, 0x06, 0x60, 0x57, 0xA0, 0x64, 0x3F }
+#define MY_TITLE "Dansk Fuzzy"
+#else
 #define MY_UUID { 0xE3, 0x8D, 0xFC, 0x3E, 0x1F, 0x96, 0x4C, 0x0F, 0xAF, 0x6F, 0x78, 0x60, 0xA5, 0x67, 0xEB, 0x27 }
+#define MY_TITLE "Dansk Tekst"
+#endif
 PBL_APP_INFO(MY_UUID,
-             "Dansk Tekst", 
+             MY_TITLE, 
              "Tanis",
-             1, 0,
+             1, 1,
              DEFAULT_MENU_ICON,
 #if DEBUG
              APP_INFO_STANDARD_APP
@@ -70,17 +77,37 @@ void get_hour_string(int hour, int minute, char *hourBuffer, size_t length)
 
 int get_minute_string(int minute, char *line1, char *line2, char *line3, size_t length)
 {
+#if FUZZY
+	minute = (((minute + 2) / 5) * 5) % 60;
+#endif
+
     memset(line1, 0, length);
     memset(line2, 0, length);
     memset(line3, 0, length);
 
 	int lines = 0;
-    int m1 = minute % 15;
-    int m2 = minute / 15;
-    if(minute == 15)
+    int m1;
+    int m2;
+    if(minute < 25)
+    {
+    	m1 = minute;
     	m2 = 0;
-    if(m2 == 1 || m2 == 3)
-    	m1 = 15 - m1;
+    }
+    else if(minute < 30)
+    {
+    	m1 = 30 - minute;
+    	m2 = 1;
+    }
+    else if(minute < 36)
+    {
+    	m1 = minute % 30;
+    	m2 = 2;
+    }
+    else
+    {
+    	m1 = 60 - minute;
+    	m2 = 3;
+    }
     
     lines++;
     switch(m1)
@@ -158,6 +185,56 @@ int get_minute_string(int minute, char *line1, char *line2, char *line3, size_t 
 	    case 0:
 	    case 15:
 	    	strcat(line1, "kvart");
+	    	break;
+	    case 16:
+	    	strcat(line1, "seksten");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 17:
+	    	strcat(line1, "sytten");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 18:
+	    	strcat(line1, "atten");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 19:
+	    	strcat(line1, "nitten");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 20:
+	    	strcat(line1, "tyve");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 21:
+	    	strcat(line1, "enogtyve");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 22:
+	    	strcat(line1, "toogtyve");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 23:
+	    	strcat(line1, "treogtyve");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 24:
+	    	strcat(line1, "fireogtyve");
+	    	strcat(line2, "minutter");
+	    	lines++;
+	    	break;
+	    case 25:
+	    	strcat(line1, "femogtyve");
+	    	strcat(line2, "minutter");
+	    	lines++;
 	    	break;
 	}	    
 
@@ -398,8 +475,8 @@ void handle_init(AppContextRef ctx)
 	// Init resources
 	resource_init_current_app(&APP_RESOURCES);
 	
-	fontLight = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_SANSATION_LIGHT_34));
-	fontBold = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_SANSATION_BOLD_34));
+	fontLight = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_SANSATION_LIGHT_32));
+	fontBold = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_SANSATION_BOLD_32));
 
 	for(int i = 0; i < 4; i++)
 	{
