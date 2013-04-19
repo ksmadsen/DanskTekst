@@ -226,14 +226,16 @@ int time_to_4words_da(int hours, int minutes, char *line1, char *line2, char *li
 	
 	if(minutes == 0)
 	{
-		strcpy(line1, hourText);
-		return 0;
+		strcpy(line1, "klokken");
+		strcpy(line2, hourText);
+		return 1;
 	}
 	else if(minutes == 30)
 	{
-		strcpy(line1, "halv");
-		strcpy(line2, hourText);
-		return 1;
+		strcpy(line1, "klokken");
+		strcpy(line2, "halv");
+		strcpy(line3, hourText);
+		return 2;
 	}
 	else
 	{
