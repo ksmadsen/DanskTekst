@@ -28,6 +28,7 @@ typedef struct
 	TextLayer nextLayer;	
 	PropertyAnimation currentAnimation;
 	PropertyAnimation nextAnimation;
+	int bold;
 } Line;
 
 PblTm t;
@@ -73,7 +74,23 @@ void makeAnimationsForLayers(Line *line, TextLayer *current, TextLayer *next)
 	animation_schedule(&line->currentAnimation.animation);
 }
 
-void updateLineTo(Line *line, char lineStr[2][BUFFER_SIZE], char *value)
+void configureBoldLayer(TextLayer *textlayer)
+{
+	text_layer_set_font(textlayer, fontBold);
+	text_layer_set_text_color(textlayer, GColorWhite);
+	text_layer_set_background_color(textlayer, GColorClear);
+	text_layer_set_text_alignment(textlayer, GTextAlignmentLeft);
+}
+
+void configureLightLayer(TextLayer *textlayer)
+{
+	text_layer_set_font(textlayer, fontLight);
+	text_layer_set_text_color(textlayer, GColorWhite);
+	text_layer_set_background_color(textlayer, GColorClear);
+	text_layer_set_text_alignment(textlayer, GTextAlignmentLeft);
+}
+
+void updateLineTo(Line *line, char lineStr[2][BUFFER_SIZE], char *value, int bold)
 {
 	TextLayer *next, *current;
 	
@@ -94,35 +111,28 @@ void updateLineTo(Line *line, char lineStr[2][BUFFER_SIZE], char *value)
 		memcpy(lineStr[0], value, strlen(value));
 		text_layer_set_text(next, lineStr[0]);
 	}
+
+	if(bold)
+		configureBoldLayer(next);
+	else
+		configureLightLayer(next);
+
 	
 	makeAnimationsForLayers(line, current, next);
 }
 
-bool needToUpdateLine(Line *line, char lineStr[2][BUFFER_SIZE], char *nextValue)
+bool needToUpdateLine(Line *line, char lineStr[2][BUFFER_SIZE], char *nextValue, int bold)
 {
 	char *currentStr;
 	GRect rect = layer_get_frame(&line->currentLayer.layer);
 	currentStr = (rect.origin.x == 0) ? lineStr[0] : lineStr[1];
-
+	int oldBold = line->bold;
+	line->bold = bold;
+	if (oldBold != bold)
+		return true;
 	if (memcmp(currentStr, nextValue, MAX(strlen(currentStr),strlen(nextValue))) != 0 || (strlen(nextValue) == 0 && strlen(currentStr) != 0)) 
 		return true;
 	return false;
-}
-
-void configureBoldLayer(TextLayer *textlayer)
-{
-	text_layer_set_font(textlayer, fontBold);
-	text_layer_set_text_color(textlayer, GColorWhite);
-	text_layer_set_background_color(textlayer, GColorClear);
-	text_layer_set_text_alignment(textlayer, GTextAlignmentLeft);
-}
-
-void configureLightLayer(TextLayer *textlayer)
-{
-	text_layer_set_font(textlayer, fontLight);
-	text_layer_set_text_color(textlayer, GColorWhite);
-	text_layer_set_background_color(textlayer, GColorClear);
-	text_layer_set_text_alignment(textlayer, GTextAlignmentLeft);
 }
 
 // Update screen based on new time
@@ -135,12 +145,9 @@ void display_time(PblTm *t)
 	
 	for(int i = 0; i < 4; i++)
 	{
-		if(boldIndex == i)
-			configureBoldLayer(&line[i].nextLayer);
-		else
-			configureLightLayer(&line[i].nextLayer);
-		if (needToUpdateLine(&line[i], lineStr[i], textLine[i])) 
-			updateLineTo(&line[i], lineStr[i], textLine[i]);	
+		int bold = boldIndex == i;
+		if (needToUpdateLine(&line[i], lineStr[i], textLine[i], bold)) 
+			updateLineTo(&line[i], lineStr[i], textLine[i], bold);	
 	}
 }
 

@@ -1,5 +1,5 @@
 #define LANG_DANISH 0
-#define LANG_ISLANDIC 1
+#define LANG_ICELANDIC 1
 #define BUFFER_SIZE 44
 
 /********************************* CONFIGURATION ****************************************/
@@ -32,7 +32,7 @@
 
 #endif /* FUZZY */
 
-#elif LANG == LANG_ISLANDIC
+#elif LANG == LANG_ICELANDIC
 
 #ifdef FUZZY
 
@@ -42,7 +42,7 @@
 #else
 
 #define MY_UUID { 0xA1, 0x0E, 0x86, 0xC1, 0xAD, 0x71, 0x47, 0xDD, 0x96, 0x36, 0x35, 0x94, 0xF8, 0x07, 0x40, 0xE9 }
-#define MY_TITLE "Íslenskur texti"
+#define MY_TITLE "Íslenskur Texti"
 
 #endif /* FUZZY */
 

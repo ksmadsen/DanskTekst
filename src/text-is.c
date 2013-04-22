@@ -22,13 +22,13 @@ void get_hour_string_is(int hour, int minute, char *hourBuffer, size_t length)
 {
     memset(hourBuffer, 0, length);
     
-    if (minute >= 25)
+    if (minute >= 30)
         hour++;
         
     strcat(hourBuffer, NUMBERS[hour % 12]);
 }
 
-int get_minute_string_is(int minute, char *line1, char *line2, char *line3, size_t length)
+int get_minute_string_is(int minute, char *line1, char *line2, char *line3, char *line4, size_t length)
 {
 #ifdef FUZZY
 	minute = (((minute + 2) / 5) * 5) % 60;
@@ -37,24 +37,15 @@ int get_minute_string_is(int minute, char *line1, char *line2, char *line3, size
     memset(line1, 0, length);
     memset(line2, 0, length);
     memset(line3, 0, length);
+    memset(line4, 0, length);
 
 	int lines = 0;
     int m1;
     int m2;
-    if(minute < 25)
+    if(minute < 30)
     {
     	m1 = minute;
     	m2 = 0;
-    }
-    else if(minute < 30)
-    {
-    	m1 = 30 - minute;
-    	m2 = 1;
-    }
-    else if(minute < 36)
-    {
-    	m1 = minute % 30;
-    	m2 = 2;
     }
     else
     {
@@ -165,49 +156,70 @@ int get_minute_string_is(int minute, char *line1, char *line2, char *line3, size
 	    	lines++;
 	    	break;
 	    case 21:
-	    	strcat(line1, "tuttugu og ein");
-	    	strcat(line2, "mínóta");
-	    	lines++;
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og ein");
+	    	strcat(line3, "mínóta");
+	    	lines+=2;
 	    	break;
 	    case 22:
-	    	strcat(line1, "tuttugu og tvær");
-	    	strcat(line2, "mínútur");
-	    	lines++;
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og tvær");
+	    	strcat(line3, "mínútur");
+	    	lines+=2;
 	    	break;
 	    case 23:
-	    	strcat(line1, "tuttugu og þrjár");
-	    	strcat(line2, "mínútur");
-	    	lines++;
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og þrjár");
+	    	strcat(line3, "mínútur");
+	    	lines+=2;
 	    	break;
 	    case 24:
-	    	strcat(line1, "tuttugu og fjórar");
-	    	strcat(line2, "mínútur");
-	    	lines++;
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og fjórar");
+	    	strcat(line3, "mínútur");
+	    	lines+=2;
 	    	break;
 	    case 25:
-	    	strcat(line1, "tuttugu og fimm");
-	    	strcat(line2, "mínútur");
-	    	lines++;
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og fimm");
+	    	strcat(line3, "mínútur");
+	    	lines+=2;
+	    	break;
+	    case 26:
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og sex");
+	    	strcat(line3, "mínútur");
+	    	lines+=2;
+	    	break;
+	    case 27:
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og sjö");
+	    	strcat(line3, "mínútur");
+	    	lines+=2;
+	    	break;
+	    case 28:
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og átta");
+	    	strcat(line3, "mínútur");
+	    	lines+=2;
+	    	break;
+	    case 29:
+	    	strcat(line1, "tuttugu");
+	    	strcat(line2, "og níu");
+	    	strcat(line3, "mínútur");
+	    	lines+=2;
 	    	break;
 	}	    
 
 	lines++;
-	char *line = line2;
-	if(lines == 3)
-		line = line3;
+	char *line = lines == 2 ? line2 : lines == 3 ? line3 : line4;
     switch(m2)
     {
     	case 0:
-    		strcat(line, "yfir");
-    		break;
-    	case 1:
-    		strcat(line, "í hálf");
-    		break;
-    	case 2:
-    		strcat(line, "yfir hálf");
+    		strcat(line, "yfir ");
     		break;
     	case 3:
-    		strcat(line, "í");
+    		strcat(line, "í ");
     		break;
     }
     
@@ -237,9 +249,9 @@ int time_to_4words_is(int hours, int minutes, char *line1, char *line2, char *li
 	}
 	else
 	{
-		int lineCount = get_minute_string_is(minutes, line1, line2, line3, length);
-		char *line = lineCount == 2 ? line3 : line4;
-		strcpy(line, hourText);
-		return lineCount;
+		int lineCount = get_minute_string_is(minutes, line1, line2, line3, line4, length);
+		char *line = lineCount == 2 ? line2 : lineCount == 3 ? line3 : line4;
+		strcat(line, hourText);
+		return lineCount - 1;
 	}
 }
