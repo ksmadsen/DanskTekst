@@ -10,10 +10,10 @@
 
 /* If defined; compiles a version of the watch where the output is more fuzzy (i.e. less
  * precise */
-//#define FUZZY
+#define FUZZY
 
 /* Sets the output language for the watch. See above for supported languages */
-#define LANG LANG_DANISH
+#define LANG LANG_ICELANDIC
 
 /********************************* CONFIGURATION ****************************************/
 

@@ -21,6 +21,10 @@ static const char * const NUMBERS[] =
 void get_hour_string_da(int hour, int minute, char *hourBuffer, size_t length)
 {
     memset(hourBuffer, 0, length);
+
+#ifdef FUZZY
+	minute = (((minute + 2) / 5) * 5) % 60;
+#endif
     
     if (minute >= 25)
         hour++;
@@ -224,6 +228,10 @@ int time_to_4words_da(int hours, int minutes, char *line1, char *line2, char *li
 	char hourText[length];
 	get_hour_string_da(hours, minutes, hourText, length);
 	
+#ifdef FUZZY
+	minutes = (((minutes + 2) / 5) * 5) % 60;
+#endif
+
 	if(minutes == 0)
 	{
 		strcpy(line1, "klokken");
@@ -232,10 +240,9 @@ int time_to_4words_da(int hours, int minutes, char *line1, char *line2, char *li
 	}
 	else if(minutes == 30)
 	{
-		strcpy(line1, "klokken");
-		strcpy(line2, "halv");
-		strcpy(line3, hourText);
-		return 2;
+		strcpy(line1, "halv");
+		strcpy(line2, hourText);
+		return 1;
 	}
 	else
 	{
