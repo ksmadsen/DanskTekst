@@ -21,28 +21,29 @@ static const char * const NUMBERS[] =
 
 static const char * const MONTHS[] =
 {
-	"januar",
-	"februar",
-	"marts",
-	"april",
-	"maj",
-	"juni",
-	"juli",
-	"august",
+	"janúar",
+	"febrúar",
+	"mars",
+	"apríl",
+	"maí",
+	"júní",
+	"júlí",
+	"ágúst",
 	"september",
-	"november",
-	"december"
+	"október",
+	"nóvember",
+	"desember"
 };
 
 static const char * const WEEKDAYS[] =
 {
-	"søndag",
-	"mandag",
-	"tirsdag",
-	"onsdag",
-	"torsdag",
-	"fredag",
-	"lørdag"
+	"sunnudagur",
+	"mánudagur",
+	"þriðjudagur",
+	"miðvikudagur",
+	"fimmtudagur",
+	"föstudagur",
+	"laugardagur"
 };
 
 void get_date_string_is(int year, int month, int day, char *dateBuffer, size_t length)
@@ -52,7 +53,7 @@ void get_date_string_is(int year, int month, int day, char *dateBuffer, size_t l
     strcat(dateBuffer, itoa(day));
     strcat(dateBuffer, ". ");
     strcat(dateBuffer, MONTHS[month]);
-    strcat(dateBuffer, " ");
+    strcat(dateBuffer, ", ");
     strcat(dateBuffer, itoa(year + 1900));
 }
 

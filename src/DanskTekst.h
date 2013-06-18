@@ -1,5 +1,6 @@
 #define LANG_DANISH 0
 #define LANG_ICELANDIC 1
+
 #define BUFFER_SIZE 44
 
 /********************************* CONFIGURATION ****************************************/
@@ -12,11 +13,11 @@
  * precise */
 //#define FUZZY
 
-/* Sets the output language for the watch. See above for supported languages */
-#define LANG LANG_DANISH
-
 /* If defined; a small day of week and date will be shown in the right corner */
-//#define SHOW_DATE
+#define SHOW_DATE
+
+/* Sets the output language for the watch. See above for supported languages */
+#define LANG LANG_ICELANDIC
 
 /********************************* CONFIGURATION ****************************************/
 

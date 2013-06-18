@@ -7,6 +7,8 @@ PebbleTextWatch (https://github.com/wearewip/PebbleTextWatch) was used as a skel
 
 Parts of the font code inspired by http://forums.getpebble.com/discussion/4265/swedish-fuzzy-time
 
+Parts of the date code copied from https://github.com/Saracco/PebbleTextWatchWithDate
+
 Screenshot
 ==========
 ![DanskTekst screenshot](http://www.tanis.dk/pebble/screenshots/DanskTekst.png)

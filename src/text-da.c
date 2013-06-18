@@ -30,6 +30,7 @@ static const char * const MONTHS[] =
 	"juli",
 	"august",
 	"september",
+	"oktober",
 	"november",
 	"december"
 };
