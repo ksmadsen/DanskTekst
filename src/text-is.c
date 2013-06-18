@@ -1,6 +1,7 @@
 #include "pebble_os.h"
 
 #include "DanskTekst.h"
+#include "utils.h"
 
 static const char * const NUMBERS[] = 
 {
@@ -17,6 +18,50 @@ static const char * const NUMBERS[] =
     "tíu",
     "ellefu"
 };
+
+static const char * const MONTHS[] =
+{
+	"januar",
+	"februar",
+	"marts",
+	"april",
+	"maj",
+	"juni",
+	"juli",
+	"august",
+	"september",
+	"november",
+	"december"
+};
+
+static const char * const WEEKDAYS[] =
+{
+	"søndag",
+	"mandag",
+	"tirsdag",
+	"onsdag",
+	"torsdag",
+	"fredag",
+	"lørdag"
+};
+
+void get_date_string_is(int year, int month, int day, char *dateBuffer, size_t length)
+{
+    memset(dateBuffer, 0, length);
+    
+    strcat(dateBuffer, itoa(day));
+    strcat(dateBuffer, ". ");
+    strcat(dateBuffer, MONTHS[month]);
+    strcat(dateBuffer, " ");
+    strcat(dateBuffer, itoa(year + 1900));
+}
+
+void get_weekday_string_is(int daysSinceSunday, char *weekdayBuffer, size_t length)
+{
+    memset(weekdayBuffer, 0, length);
+
+    strcpy(weekdayBuffer, WEEKDAYS[daysSinceSunday]);
+}
 
 void get_hour_string_is(int hour, int minute, char *hourBuffer, size_t length)
 {
@@ -236,6 +281,10 @@ int time_to_4words_is(int hours, int minutes, char *line1, char *line2, char *li
 	char hourText[length];
 	get_hour_string_is(hours, minutes, hourText, length);
 	
+#ifdef FUZZY
+	minutes = (((minutes + 2) / 5) * 5) % 60;
+#endif
+
 	if(minutes == 0)
 	{
 		strcpy(line1, hourText);

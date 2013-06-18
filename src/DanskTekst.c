@@ -4,6 +4,7 @@
 #include "pebble_os.h"
 #include "pebble_app.h"
 #include "pebble_fonts.h"
+#include <ctype.h>
 
 #include "DanskTekst.h"
 #include "text.h"
@@ -30,6 +31,10 @@ typedef struct
 	PropertyAnimation nextAnimation;
 	int bold;
 } Line;
+#ifdef SHOW_DATE
+TextLayer date;
+TextLayer day;
+#endif
 
 PblTm t;
 
@@ -39,6 +44,20 @@ static char lineStr[4][2][BUFFER_SIZE];
 static bool textInitialized = false;
 
 GFont fontLight,fontBold;
+
+#ifdef SHOW_DATE
+void setDate(PblTm *tm)
+{
+	static char dateString[BUFFER_SIZE];
+	static char dayString[BUFFER_SIZE];
+	
+	get_date_string(tm->tm_year, tm->tm_mon, tm->tm_mday, dateString, BUFFER_SIZE);
+	get_weekday_string(tm->tm_wday, dayString, BUFFER_SIZE);
+	
+	text_layer_set_text(&date, dateString);
+	text_layer_set_text(&day, dayString);
+}
+#endif 
 
 /*********************************** ANIMATION ******************************************/
 
@@ -164,6 +183,9 @@ void display_initial_time(PblTm *t)
 			configureLightLayer(&line[i].currentLayer);
 		text_layer_set_text(&line[i].currentLayer, lineStr[i][0]);
 	}
+#ifdef SHOW_DATE
+	setDate(t);
+#endif
 }
 
 /** 
@@ -239,6 +261,20 @@ void handle_init(AppContextRef ctx)
 		text_layer_init(&line[i].nextLayer, GRect(144, 2 + (i * 37), 144, 50));
 	}
 
+#ifdef SHOW_DATE
+	//date & day layers
+	text_layer_init(&date, GRect(0, 150, 144, 168-150));
+    text_layer_set_text_color(&date, GColorWhite);
+    text_layer_set_background_color(&date, GColorClear);
+    text_layer_set_font(&date, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+    text_layer_set_text_alignment(&date, GTextAlignmentRight);
+	text_layer_init(&day, GRect(0, 135, 144, 168-135));
+    text_layer_set_text_color(&day, GColorWhite);
+    text_layer_set_background_color(&day, GColorClear);
+    text_layer_set_font(&day, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
+    text_layer_set_text_alignment(&day, GTextAlignmentRight);
+#endif
+
 	// Configure time on init
 	get_time(&t);
 	display_initial_time(&t);
@@ -252,6 +288,10 @@ void handle_init(AppContextRef ctx)
 	layer_add_child(&window.layer, &line[2].nextLayer.layer);
 	layer_add_child(&window.layer, &line[3].currentLayer.layer);
 	layer_add_child(&window.layer, &line[3].nextLayer.layer);
+#ifdef SHOW_DATE
+	layer_add_child(&window.layer, &date.layer);
+	layer_add_child(&window.layer, &day.layer);
+#endif
 	
 #ifdef DEBUG
 	// Button functionality
@@ -265,6 +305,12 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t)
   (void)ctx;
 
   display_time(t->tick_time);
+#ifdef SHOW_DATE
+  if (t->units_changed & DAY_UNIT) 
+  {
+    setDate(t->tick_time);
+  }
+#endif
 }
 
 void pbl_main(void *params) 

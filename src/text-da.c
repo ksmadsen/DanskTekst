@@ -1,6 +1,7 @@
 #include "pebble_os.h"
 
 #include "DanskTekst.h"
+#include "utils.h"
 
 static const char * const NUMBERS[] = 
 {
@@ -18,14 +19,54 @@ static const char * const NUMBERS[] =
     "elleve"
 };
 
+static const char * const MONTHS[] =
+{
+	"januar",
+	"februar",
+	"marts",
+	"april",
+	"maj",
+	"juni",
+	"juli",
+	"august",
+	"september",
+	"november",
+	"december"
+};
+
+static const char * const WEEKDAYS[] =
+{
+	"søndag",
+	"mandag",
+	"tirsdag",
+	"onsdag",
+	"torsdag",
+	"fredag",
+	"lørdag"
+};
+
+void get_date_string_da(int year, int month, int day, char *dateBuffer, size_t length)
+{
+    memset(dateBuffer, 0, length);
+    
+    strcat(dateBuffer, itoa(day));
+    strcat(dateBuffer, ". ");
+    strcat(dateBuffer, MONTHS[month]);
+    strcat(dateBuffer, " ");
+    strcat(dateBuffer, itoa(year + 1900));
+}
+
+void get_weekday_string_da(int daysSinceSunday, char *weekdayBuffer, size_t length)
+{
+    memset(weekdayBuffer, 0, length);
+
+    strcpy(weekdayBuffer, WEEKDAYS[daysSinceSunday]);
+}
+
 void get_hour_string_da(int hour, int minute, char *hourBuffer, size_t length)
 {
     memset(hourBuffer, 0, length);
 
-#ifdef FUZZY
-	minute = (((minute + 2) / 5) * 5) % 60;
-#endif
-    
     if (minute >= 25)
         hour++;
         
