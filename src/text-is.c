@@ -204,7 +204,7 @@ int get_minute_string_is(int minute, char *line1, char *line2, char *line3, char
 	    case 21:
 	    	strcat(line1, "tuttugu");
 	    	strcat(line2, "og ein");
-	    	strcat(line3, "mínóta");
+	    	strcat(line3, "mínúta");
 	    	lines+=2;
 	    	break;
 	    case 22:
