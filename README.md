@@ -9,6 +9,8 @@ Parts of the font code inspired by http://forums.getpebble.com/discussion/4265/s
 
 Parts of the date code copied from https://github.com/Saracco/PebbleTextWatchWithDate
 
+Run configure.sh to generate appinfo.json and src/config.h files for your build choices.
+
 Screenshot
 ==========
 ![DanskTekst screenshot](http://www.tanis.dk/pebble/screenshots/DanskTekst.png)

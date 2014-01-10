@@ -1,1 +1,8 @@
-.DS_Store
+# Ignore configure.sh generated files
+appinfo.json
+src/config.h
+
+# Ignore build generated files
+build
+.lock-waf*
+
