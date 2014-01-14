@@ -45,7 +45,21 @@ struct tm *tm;
 
 /*********************************** ANIMATION ******************************************/
 
-void animationStoppedHandler(struct Animation *animation, bool finished, void *context)
+void destroy_property_animation(PropertyAnimation **prop_animation) {
+  if (*prop_animation == NULL) {
+    return;
+  }
+
+  if (animation_is_scheduled((Animation*) *prop_animation)) {
+    animation_unschedule((Animation*) *prop_animation);
+  }
+
+  property_animation_destroy(*prop_animation);
+  *prop_animation = NULL;
+}
+
+
+void animationStoppedHandler(Animation *animation, bool finished, void *context)
 {
   TextLayer *current = (TextLayer *)context;
   GRect rect = layer_get_frame(text_layer_get_layer(current));
@@ -57,6 +71,9 @@ void makeAnimationsForLayers(Line *line, TextLayer *current, TextLayer *next)
 {
   GRect rect = layer_get_frame(text_layer_get_layer(next));
   rect.origin.x -= 144;
+
+  destroy_property_animation(&line->nextAnimation);
+  destroy_property_animation(&line->currentAnimation);
 	
   line->nextAnimation = property_animation_create_layer_frame(text_layer_get_layer(next), NULL, &rect);
   animation_set_duration((Animation*) line->nextAnimation, 400);
@@ -240,6 +257,8 @@ void handle_init()
   for (int i = 0; i < 4; i++) {
     line[i].currentLayer = text_layer_create(GRect(0, 2 + (i * 37), 144, 50));
     line[i].nextLayer = text_layer_create(GRect(144, 2 + (i * 37), 144, 50));
+    line[i].currentAnimation = NULL;
+    line[i].nextAnimation = NULL;
   }
 
 #ifdef SHOW_DATE
@@ -297,6 +316,8 @@ void handle_deinit()
   for (int i = 0; i < 4; i++) {
     text_layer_destroy(line[i].nextLayer);
     text_layer_destroy(line[i].currentLayer);
+    destroy_property_animation(&line[i].nextAnimation);
+    destroy_property_animation(&line[i].currentAnimation);
   }
 
   fonts_unload_custom_font(fontLight);
