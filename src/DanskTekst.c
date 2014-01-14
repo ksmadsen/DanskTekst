@@ -286,18 +286,18 @@ void handle_init()
 void handle_deinit()
 {
   tick_timer_service_unsubscribe();
+  window_stack_remove(window, false);
+  window_destroy(window);
 
 #ifdef SHOW_DATE
   text_layer_destroy(day);
   text_layer_destroy(date);
 #endif
 
-  for (int i = 3; i > 0; i--) {
+  for (int i = 0; i < 4; i++) {
     text_layer_destroy(line[i].nextLayer);
     text_layer_destroy(line[i].currentLayer);
   }
-
-  window_destroy(window);
 }
 
 int main(void) 
