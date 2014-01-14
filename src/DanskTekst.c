@@ -48,25 +48,25 @@ struct tm *tm;
 void animationStoppedHandler(struct Animation *animation, bool finished, void *context)
 {
   TextLayer *current = (TextLayer *)context;
-  GRect rect = layer_get_frame((Layer*) current);
+  GRect rect = layer_get_frame(text_layer_get_layer(current));
   rect.origin.x = 144;
-  layer_set_frame((Layer*) current, rect);
+  layer_set_frame(text_layer_get_layer(current), rect);
 }
 
 void makeAnimationsForLayers(Line *line, TextLayer *current, TextLayer *next)
 {
-  GRect rect = layer_get_frame((Layer*) next);
+  GRect rect = layer_get_frame(text_layer_get_layer(next));
   rect.origin.x -= 144;
 	
-  line->nextAnimation = property_animation_create_layer_frame((Layer*) next, NULL, &rect);
+  line->nextAnimation = property_animation_create_layer_frame(text_layer_get_layer(next), NULL, &rect);
   animation_set_duration((Animation*) line->nextAnimation, 400);
   animation_set_curve((Animation*) line->nextAnimation, AnimationCurveEaseOut);
   animation_schedule((Animation*) line->nextAnimation);
 	
-  GRect rect2 = layer_get_frame((Layer*) current);
+  GRect rect2 = layer_get_frame(text_layer_get_layer(current));
   rect2.origin.x -= 144;
 	
-  line->currentAnimation = property_animation_create_layer_frame((Layer*) current, NULL, &rect2);
+  line->currentAnimation = property_animation_create_layer_frame(text_layer_get_layer(current), NULL, &rect2);
   animation_set_duration((Animation*) line->currentAnimation, 400);
   animation_set_curve((Animation*) line->currentAnimation, AnimationCurveEaseOut);
 	
@@ -98,7 +98,7 @@ void updateLineTo(Line *line, char lineStr[2][BUFFER_SIZE], char *value, int bol
 {
   TextLayer *next, *current;
 	
-  GRect rect = layer_get_frame((Layer*) line->currentLayer);
+  GRect rect = layer_get_frame(text_layer_get_layer(line->currentLayer));
   current = (rect.origin.x == 0) ? line->currentLayer : line->nextLayer;
   next = (current == line->currentLayer) ? line->nextLayer : line->currentLayer;
 	
@@ -125,7 +125,7 @@ void updateLineTo(Line *line, char lineStr[2][BUFFER_SIZE], char *value, int bol
 bool needToUpdateLine(Line *line, char lineStr[2][BUFFER_SIZE], char *nextValue, int bold)
 {
   char *currentStr;
-  GRect rect = layer_get_frame((Layer*) line->currentLayer);
+  GRect rect = layer_get_frame(text_layer_get_layer(line->currentLayer));
   currentStr = (rect.origin.x == 0) ? lineStr[0] : lineStr[1];
   int oldBold = line->bold;
   line->bold = bold;
@@ -269,12 +269,12 @@ void handle_init()
   root = window_get_root_layer(window);
 
   for (int i = 0; i < 4; i++) {
-    layer_add_child(root, (Layer*) line[i].currentLayer);
-    layer_add_child(root, (Layer*) line[i].nextLayer);
+    layer_add_child(root, text_layer_get_layer(line[i].currentLayer));
+    layer_add_child(root, text_layer_get_layer(line[i].nextLayer));
   }
 #ifdef SHOW_DATE
-  layer_add_child(root, (Layer*) date);
-  layer_add_child(root, (Layer*) day);
+  layer_add_child(root, text_layer_get_layer(date));
+  layer_add_child(root, text_layer_get_layer(day));
 #endif
 	
 #ifdef DEBUG
