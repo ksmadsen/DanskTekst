@@ -298,6 +298,9 @@ void handle_deinit()
     text_layer_destroy(line[i].nextLayer);
     text_layer_destroy(line[i].currentLayer);
   }
+
+  fonts_unload_custom_font(fontLight);
+  fonts_unload_custom_font(fontBold);
 }
 
 int main(void) 
