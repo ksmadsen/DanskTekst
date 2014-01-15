@@ -45,28 +45,45 @@ struct tm *tm;
 
 /*********************************** ANIMATION ******************************************/
 
-void animationStoppedHandler(struct Animation *animation, bool finished, void *context)
+void destroy_property_animation(PropertyAnimation **prop_animation) {
+  if (*prop_animation == NULL) {
+    return;
+  }
+
+  if (animation_is_scheduled((Animation*) *prop_animation)) {
+    animation_unschedule((Animation*) *prop_animation);
+  }
+
+  property_animation_destroy(*prop_animation);
+  *prop_animation = NULL;
+}
+
+
+void animationStoppedHandler(Animation *animation, bool finished, void *context)
 {
   TextLayer *current = (TextLayer *)context;
-  GRect rect = layer_get_frame((Layer*) current);
+  GRect rect = layer_get_frame(text_layer_get_layer(current));
   rect.origin.x = 144;
-  layer_set_frame((Layer*) current, rect);
+  layer_set_frame(text_layer_get_layer(current), rect);
 }
 
 void makeAnimationsForLayers(Line *line, TextLayer *current, TextLayer *next)
 {
-  GRect rect = layer_get_frame((Layer*) next);
+  GRect rect = layer_get_frame(text_layer_get_layer(next));
   rect.origin.x -= 144;
+
+  destroy_property_animation(&line->nextAnimation);
+  destroy_property_animation(&line->currentAnimation);
 	
-  line->nextAnimation = property_animation_create_layer_frame((Layer*) next, NULL, &rect);
+  line->nextAnimation = property_animation_create_layer_frame(text_layer_get_layer(next), NULL, &rect);
   animation_set_duration((Animation*) line->nextAnimation, 400);
   animation_set_curve((Animation*) line->nextAnimation, AnimationCurveEaseOut);
   animation_schedule((Animation*) line->nextAnimation);
 	
-  GRect rect2 = layer_get_frame((Layer*) current);
+  GRect rect2 = layer_get_frame(text_layer_get_layer(current));
   rect2.origin.x -= 144;
 	
-  line->currentAnimation = property_animation_create_layer_frame((Layer*) current, NULL, &rect2);
+  line->currentAnimation = property_animation_create_layer_frame(text_layer_get_layer(current), NULL, &rect2);
   animation_set_duration((Animation*) line->currentAnimation, 400);
   animation_set_curve((Animation*) line->currentAnimation, AnimationCurveEaseOut);
 	
@@ -98,7 +115,7 @@ void updateLineTo(Line *line, char lineStr[2][BUFFER_SIZE], char *value, int bol
 {
   TextLayer *next, *current;
 	
-  GRect rect = layer_get_frame((Layer*) line->currentLayer);
+  GRect rect = layer_get_frame(text_layer_get_layer(line->currentLayer));
   current = (rect.origin.x == 0) ? line->currentLayer : line->nextLayer;
   next = (current == line->currentLayer) ? line->nextLayer : line->currentLayer;
 	
@@ -125,7 +142,7 @@ void updateLineTo(Line *line, char lineStr[2][BUFFER_SIZE], char *value, int bol
 bool needToUpdateLine(Line *line, char lineStr[2][BUFFER_SIZE], char *nextValue, int bold)
 {
   char *currentStr;
-  GRect rect = layer_get_frame((Layer*) line->currentLayer);
+  GRect rect = layer_get_frame(text_layer_get_layer(line->currentLayer));
   currentStr = (rect.origin.x == 0) ? lineStr[0] : lineStr[1];
   int oldBold = line->bold;
   line->bold = bold;
@@ -240,6 +257,8 @@ void handle_init()
   for (int i = 0; i < 4; i++) {
     line[i].currentLayer = text_layer_create(GRect(0, 2 + (i * 37), 144, 50));
     line[i].nextLayer = text_layer_create(GRect(144, 2 + (i * 37), 144, 50));
+    line[i].currentAnimation = NULL;
+    line[i].nextAnimation = NULL;
   }
 
 #ifdef SHOW_DATE
@@ -269,12 +288,12 @@ void handle_init()
   root = window_get_root_layer(window);
 
   for (int i = 0; i < 4; i++) {
-    layer_add_child(root, (Layer*) line[i].currentLayer);
-    layer_add_child(root, (Layer*) line[i].nextLayer);
+    layer_add_child(root, text_layer_get_layer(line[i].currentLayer));
+    layer_add_child(root, text_layer_get_layer(line[i].nextLayer));
   }
 #ifdef SHOW_DATE
-  layer_add_child(root, (Layer*) date);
-  layer_add_child(root, (Layer*) day);
+  layer_add_child(root, text_layer_get_layer(date));
+  layer_add_child(root, text_layer_get_layer(day));
 #endif
 	
 #ifdef DEBUG
@@ -286,18 +305,23 @@ void handle_init()
 void handle_deinit()
 {
   tick_timer_service_unsubscribe();
+  window_stack_remove(window, false);
+  window_destroy(window);
 
 #ifdef SHOW_DATE
   text_layer_destroy(day);
   text_layer_destroy(date);
 #endif
 
-  for (int i = 3; i > 0; i--) {
+  for (int i = 0; i < 4; i++) {
     text_layer_destroy(line[i].nextLayer);
     text_layer_destroy(line[i].currentLayer);
+    destroy_property_animation(&line[i].nextAnimation);
+    destroy_property_animation(&line[i].currentAnimation);
   }
 
-  window_destroy(window);
+  fonts_unload_custom_font(fontLight);
+  fonts_unload_custom_font(fontBold);
 }
 
 int main(void) 
