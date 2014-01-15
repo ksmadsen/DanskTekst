@@ -11,19 +11,4 @@ Parts of the date code copied from https://github.com/Saracco/PebbleTextWatchWit
 
 Run configure.sh to generate appinfo.json and src/config.h files for your build choices.
 
-Screenshot
-==========
-![DanskTekst screenshot](http://www.tanis.dk/pebble/screenshots/DanskTekst.png)
-
-Binary
-======
-The binary can be downloaded here:
-
-Precise version:
-http://www.tanis.dk/pebble/DanskTekst.pbw
-
-Fuzzy version:
-http://www.tanis.dk/pebble/DanskFuzzy.pbw
-
-Also downloadable on:
-http://www.mypebblefaces.com
+Thanks to ksmadsen for the Pebble SDK 2.0 update.

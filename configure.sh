@@ -38,8 +38,7 @@ function write_appinfo_json {
     if [ $LANG == 1 ]; then
 	if [ $FUZZY == y ]; then
 	    if [ $SHOW_DATE == y ]; then
-	        # This UUID is invalid
-		UUID="f4180083-f9ad-4bba-98c0-b49f33f9710c"
+		UUID="CB3924BB-B95D-4F8F-AAC0-BD81A38F3DE3"
 		NAME="Dansk Fuzzy med dato"
 	    else
 		UUID="7bded28e-f202-436f-af71-066057a0643f"
@@ -60,16 +59,15 @@ function write_appinfo_json {
 		UUID="21738945-1736-4100-855b-840aed2a060a"
 		NAME="Islenskt Fuzzy with Date"
 	    else
-		UUID="434181c933-2445-1b81-d949-1f310f4d8e"
+		UUID="02BD3530-45F5-4430-9EBB-7CDC64F227BC"
 		NAME="Islenskt Fuzzy"
 	    fi
 	else
 	    if [ $SHOW_DATE == y ]; then
-		# This UUID is invalid
-		UUID="fc05e6c50a-ae46-9588-4be1-60e47a463d"
+		UUID="087B005F-E87F-4A18-9EA6-2AD7698414EC"
 		NAME="Islenskur Texti with Date"
 	    else
-		UUID="a10e86c1ad-7147-dd96-3635-94f80740e9"
+		UUID="6FA465FF-895E-40BB-9401-1FDCDC32B92C"
 		NAME="Islenskur Texti"
 	    fi
 	fi
