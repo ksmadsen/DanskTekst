@@ -5,4 +5,6 @@
 
 #include "config.h"
 
+#define BATTERY_STAT
+
 #define MAX(a,b) (a > b ? a : b)

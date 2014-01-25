@@ -22,6 +22,11 @@ TextLayer *date;
 TextLayer *day;
 #endif
 
+#ifdef BATTERY_STAT
+Layer *battery_layer;
+BatteryChargeState battery_state;
+#endif
+
 Line line[4];
 static char lineStr[4][2][BUFFER_SIZE];
 
@@ -192,6 +197,10 @@ void display_initial_time(struct tm *t)
 #ifdef SHOW_DATE
   setDate(t);
 #endif
+
+#ifdef BATTERY_STAT
+  layer_mark_dirty(battery_layer);
+#endif
 }
 
 /** 
@@ -233,6 +242,49 @@ void click_config_provider(void *context)
 
 #endif
 
+#ifdef BATTERY_STAT
+void battery_layer_update_proc(struct Layer *layer, GContext *ctx)
+{
+  graphics_context_set_fill_color(ctx, GColorBlack);
+  graphics_fill_rect(ctx, layer_get_bounds(layer), 0, GCornerNone);
+
+  if (!battery_state.is_charging && !battery_state.is_plugged) {
+    graphics_context_set_stroke_color(ctx, GColorWhite);
+    GRect layer_rect = layer_get_bounds(layer);
+
+    graphics_context_set_fill_color(ctx, GColorWhite);
+    graphics_fill_rect(ctx, GRect(layer_rect.origin.x, 
+				  layer_rect.origin.y + 3,
+				  2,
+				  layer_rect.size.h - 6), 0, GCornerNone);
+
+    layer_rect.origin.x += 2;
+    layer_rect.size.w -= 2;
+
+    graphics_draw_rect(ctx, layer_rect);
+
+    layer_rect.origin.x += 2;
+    layer_rect.origin.y += 2;
+    layer_rect.size.w -= 4;
+    layer_rect.size.h -= 4;
+
+    int size = layer_rect.size.w - (battery_state.charge_percent * layer_rect.size.w + 1) / 100;
+    layer_rect.origin.x += size;
+    layer_rect.size.w -= size;
+
+    app_log(APP_LOG_LEVEL_INFO, __FILE__, __LINE__, "Battery stat: %d%%, size: %d", battery_state.charge_percent, size);
+
+    graphics_fill_rect(ctx, layer_rect, 0, GCornerNone);
+  }
+}
+
+void battery_state_handler(BatteryChargeState new_state)
+{
+  battery_state = new_state;
+  layer_mark_dirty(battery_layer);
+}
+#endif
+
 // Time handler called every minute by the system
 void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) 
 {
@@ -260,6 +312,11 @@ void handle_init()
     line[i].currentAnimation = NULL;
     line[i].nextAnimation = NULL;
   }
+
+#ifdef BATTERY_STAT
+  battery_layer = layer_create(GRect(120, 2, 22, 10));
+  layer_set_update_proc(battery_layer, battery_layer_update_proc);
+#endif
 
 #ifdef SHOW_DATE
   //date & day layers
@@ -295,7 +352,13 @@ void handle_init()
   layer_add_child(root, text_layer_get_layer(date));
   layer_add_child(root, text_layer_get_layer(day));
 #endif
-	
+
+#ifdef BATTERY_STAT
+  battery_state = battery_state_service_peek();
+  layer_add_child(root, battery_layer);
+  battery_state_service_subscribe(battery_state_handler);
+#endif
+
 #ifdef DEBUG
   // Button functionality
   window_set_click_config_provider(window, click_config_provider);
@@ -311,6 +374,11 @@ void handle_deinit()
 #ifdef SHOW_DATE
   text_layer_destroy(day);
   text_layer_destroy(date);
+#endif
+
+#ifdef BATTERY_STAT
+  battery_state_service_unsubscribe();
+  layer_destroy(battery_layer);
 #endif
 
   for (int i = 0; i < 4; i++) {
